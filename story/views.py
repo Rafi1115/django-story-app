@@ -88,13 +88,13 @@ class PageView(ListView):
     model = Post
     template_name = 'foods.html'
     context_object_name = 'queryset'
-    paginate_by = 4
+    paginate_by = 1
 
     def get_context_data(self, **kwargs):
         recent = Post.objects.order_by('timestamp')[0:3]
         context = super().get_context_data(**kwargs)
         context['recent'] = recent
-        context['page_request_var'] = "page"
+        #context['page_request_var'] = "page"
         return context
     
 # class PostCategory(ListView):

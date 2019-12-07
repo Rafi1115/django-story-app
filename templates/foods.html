@@ -41,31 +41,50 @@
 		          <div class="col text-center">
 		            <div class="block-27">
 						 <!-- Pagination -->
-						 
-								<ul>
-								  {% if queryset.has_previous %}                
-								  <li><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}">&lt;</a></li>
-								  {% endif %}
-				
-								  {% if queryset.has_next %}
-								  <li><a href="?{{ page_request_var }}={{ queryset.next_page_number }}">></a></li>
-								  {% endif %}
-								</ul>
-		
-							  {% if is_paginated %}
+{% comment %}
+						 {% if is_paginated %}
+						 <ul>
+						   {% if page_obj.has_previous %}
+							 <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
 
-								<ul>
-								  {% if page_obj.has_previous %}                
-								  <li ><a href="?{{ page_request_var }}={{ page_obj.previous_page_number }}">&lt;</a></li>
-								  {% endif %}
-								
-								  <li  class="active" ><a href="?{{ page_request_var }}={{ page_obj.number }}">{{ page_obj.number }}</a></li>
-								  {% if page_obj.has_next %}
-								  <li ><a href="?{{ page_request_var }}={{ page_obj.next_page_number }}" >></a></li>
-								  {% endif %}
-								</ul>
-							  {% endif %}
-		          
+						   {% endif %}
+						   {% for i in paginator.page_range %}
+							 {% if page_obj.number == i %}
+							   <li class="active"><span>{{ i }}</span></li>
+							 {% else %}
+							   <li><a href="?page={{ i }}">{{ i }}</a></li>
+							 {% endif %}
+						   {% endfor %}
+						   {% if page_obj.has_next %}
+							 <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+						  
+						   {% endif %}
+						 </ul>
+					   {% endif %}
+ {% endcomment %}
+
+                       {% if is_paginated %}
+						 <ul>
+						   {% if page_obj.has_previous %}
+							 <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+						   {% endif %}
+
+				{% for i in paginator.page_range %}
+							
+							{% if i <= page_obj.number|add:3 and i >= page_obj.number|add:-3 %}
+							<li><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+						   {% endif %}
+			
+				{% endfor %}
+
+
+						   {% if page_obj.has_next %}
+							 <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+						   {% endif %}
+						 </ul>
+					   {% endif %}
+
+
 		            </div>
 		          </div>
 		        </div>
@@ -166,4 +185,41 @@
 						<li><a href="#">5</a></li>
 						
 		                <li><a href="#">&gt;</a></li>
-		              </ul>
+					  </ul>
+					  
+
+					  <ul>
+							{% if queryset.has_previous %}                
+							<li><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}">&lt;</a></li>
+							{% endif %}
+		  
+							{% if queryset.has_next %}
+							<li><a href="?{{ page_request_var }}={{ queryset.next_page_number }}">></a></li>
+							{% endif %}
+						  </ul>
+  
+						{% if is_paginated %}
+
+						  <ul>
+							{% if page_obj.has_previous %}                
+							<li ><a href="?{{ page_request_var }}={{ page_obj.previous_page_number }}">&lt;</a></li>
+							{% endif %}
+							
+							<li  class="active" ><a href="?{{ page_request_var }}={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+							{% if page_obj.has_next %}
+							<li ><a href="?{{ page_request_var }}={{ page_obj.next_page_number }}" >></a></li>
+							{% endif %}
+						  </ul>
+						{% endif %}
+
+
+
+					{% for l in paginator.page_range %}
+
+						{% if forloop.counter < 5 %}
+							<li><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+						{% endif %}
+					  {% endfor %}
+					  {% if i <= page_obj.number|add:5 and i >= page_obj.number|add:-5 %}
+					  <li><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+					 {% endif %}
