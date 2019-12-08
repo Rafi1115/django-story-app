@@ -62,10 +62,7 @@
 						 </ul>
 					   {% endif %}
 
-					   <!-- just like django  -->
-
-
-
+					   <!-- just like justdjango above one -->
 
                     {% if is_paginated %}
 						 <ul>
@@ -73,13 +70,13 @@
 							 <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
 						     {% endif %}
 
-				{% for i in paginator.page_range %}
+				 {% for i in paginator.page_range %}
 							
 					{% if i <= page_obj.number|add:3 and i >= page_obj.number|add:-3 %}
 							<li><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
 					{% endif %}
 			
-				{% endfor %}
+			    	{% endfor %}
 
 
 						   {% if page_obj.has_next %}
@@ -93,11 +90,10 @@
                     <ul>
 						{% if page_obj.has_previous %}
 						<li>
-						  <a href="?page=1">
-							<span aria-hidden="true">&laquo;</span>
-							<span class="sr-only">begin</span>
-						  </a>
-						</li>   {% endif %}
+						  <a href="?page=1"><span aria-hidden="true">&laquo;</span></a>
+						  <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+						</li>   
+						{% endif %}
 						
 						{% for n in page_obj.paginator.page_range %}
 						  {% if page_obj.number == n %}
@@ -111,12 +107,14 @@
 						
 						{% if page_obj.has_next %}
 						  <li class="page-item">
+							  
+							<a href="?page={{ page_obj.next_page_number }}">&gt;</a>
 							<a href="?page={{ page_obj.paginator.num_pages }}">
-							  <span aria-hidden="true">&raquo;</span>
-							  <span class="sr-only">end</span>
-							</a>
+								<span aria-hidden="true">&raquo;</span></a>
+
 						  </li>
-						  {% endif %}   </ul>
+						  {% endif %}   
+					</ul>
 		            </div>
 		          </div>
 		        </div>
