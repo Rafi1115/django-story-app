@@ -63,24 +63,58 @@ class IndexView(TemplateView):
 
 
 class IndexDetailView(DetailView):
-    model= Post
+    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
+
+    def get_context_data(self, **kwargs):
+        recents = Post.objects.order_by('-timestamp')[0:4]  
+
+        context = super().get_context_data(**kwargs)
+        context['recents'] = recents
+        return context
+
     
+# class RecentDetailView(DetailView):
+#     model= Post
+#     context_object_name = 'queryset'
+#     template_name = 'sing.html'
+
 class AdDetailView(DetailView):
     model= Advertise
+    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
+    def get_context_data(self, **kwargs):
+        recents = Post.objects.order_by('-timestamp')[0:4]  
+
+        context = super().get_context_data(**kwargs)
+        context['recents'] = recents
+        return context
 
 class ReDetailView(DetailView):
     model= Recipe
+    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
+    def get_context_data(self, **kwargs):
+        recents = Post.objects.order_by('-timestamp')[0:4]  
+
+        context = super().get_context_data(**kwargs)
+        context['recents'] = recents
+        return context
 
 class FeDetailView(DetailView):
     model= FeaturedPost
+    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
+    def get_context_data(self, **kwargs):
+        recents = Post.objects.order_by('-timestamp')[0:4]  
+
+        context = super().get_context_data(**kwargs)
+        context['recents'] = recents
+        return context
 
 
 
@@ -109,11 +143,33 @@ class PageView(ListView):
 #         context['category'] = self.category
 #         return context
 
-
 class CategoryDetailView(generic.DetailView):
     model = Category
     context_object_name = 'category'
     template_name = 'slider.html'
+    paginate_by = 1
+
+
+class StyleView(ListView):
+    model = Category
+    model = Post
+    template_name = 'lifestyle.html'
+    context_object_name = 'queryset'
+
+    def get_context_data(self, **kwargs):
+        cate = Category.objects.all()
+       # category = Post.category.filter(featured=True)
+        context = super().get_context_data(**kwargs)
+        context['cate'] = cate
+        context['category'] = category
+        return context
+
+ 
+class CategorylView(generic.DetailView):
+    model = Category
+    context_object_name = 'queryset'
+    template_name = 'slider.html'
+   
 
 
 class SingleView(TemplateView):
@@ -122,8 +178,6 @@ class SingleView(TemplateView):
 class AboutView(TemplateView):
     template_name = 'about.html'
 
-class StyleView(TemplateView):
-    template_name = 'lifestyle.html'
 
 
 def contact(request):

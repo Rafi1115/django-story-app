@@ -23,15 +23,13 @@ class Category(models.Model):
     title = models.CharField(max_length=20)
     thumbnail = models.ImageField()
     detail = models.TextField()
-
+    featured = models.BooleanField(default=True)
     # class Meta:
     #     verbose_name_plural = "Categories"
     def __str__(self):
         return self.title
-
     # def get_absolute_url(self):
     #     return reverse('post-category', args=[self.title])
-
     def get_absolute_url(self):
         return reverse('post-category', kwargs={
             'pk': self.pk

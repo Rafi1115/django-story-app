@@ -4,7 +4,8 @@ from django.urls import path
 from .import views
 from .views import (
     IndexView, SingleView, AboutView, StyleView, PageView,
-    contact, CategoryDetailView, IndexDetailView, AdDetailView, ReDetailView, FeDetailView, successView
+    contact, CategoryDetailView, IndexDetailView, AdDetailView,
+    ReDetailView, FeDetailView, successView, CategorylView
 )
 
 urlpatterns = [
@@ -19,10 +20,13 @@ urlpatterns = [
     path('p/<pk>/', views.FeDetailView.as_view(), name='post-featured'),
 
     path('cat/<pk>/', views.CategoryDetailView.as_view(), name='post-category'),
-    
+
+    path('style/', views.StyleView.as_view(), name='style'),
+    path('style/<pk>/', views.StyleView.as_view(), name='style'),
+
     path('single/', views.SingleView.as_view(), name='single'),
     path('about/', views.AboutView.as_view(), name='about'),
-    path('style/', views.StyleView.as_view(), name='style'),
+  
     
     path('contact/', contact, name='email'),
     path('success/', successView, name='success'),

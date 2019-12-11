@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'story',
+    'taggit',
 
     'crispy_forms',
    
