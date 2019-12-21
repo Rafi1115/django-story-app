@@ -12,6 +12,13 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from .forms import ContactForm
 from .models import Post, Author, PostView, Category, Recipe, FeaturedPost, Advertise
+from taggit.models import Tag
+
+# class TagMixin(object):
+#     def get_context_data(self, **kwargs):
+#         context = super(TagMixin, self).get_context_data(**kwargs)
+#         context['category'] = Category.objects.all()
+#         return context
 
 
 def get_author(user):
@@ -19,6 +26,7 @@ def get_author(user):
     if qs.exists():
         return qs[0]
     return None
+
 
 class SearchView(View):
     def get(self, request, *args, **kwargs):
@@ -44,12 +52,11 @@ class IndexView(TemplateView):
     context_object_name = 'queryset'
 
     def get_context_data(self, **kwargs):
-
         recents = Post.objects.order_by('-timestamp')[0:4]
         recent = Post.objects.order_by('timestamp')[0:1]
         featured = FeaturedPost.objects.filter()[0:3]
         recipe = Recipe.objects.filter()[0:2]
-        category = Category.objects.all()[0:4]
+
         advertise = Advertise.objects.filter()[0:5]
         
         context = super().get_context_data(**kwargs)
@@ -58,8 +65,9 @@ class IndexView(TemplateView):
         context['recipe'] = recipe
         context['featured'] = featured
         context['advertise'] = advertise
-        context['category'] = category
+     
         return context
+
 
 
 class IndexDetailView(DetailView):
@@ -68,13 +76,13 @@ class IndexDetailView(DetailView):
     template_name = 'single.html'
 
     def get_context_data(self, **kwargs):
+        tags = Post.tags.all()
         recents = Post.objects.order_by('-timestamp')[0:4]  
-
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
+        context['tags'] = tags
         return context
 
-    
 # class RecentDetailView(DetailView):
 #     model= Post
 #     context_object_name = 'queryset'
@@ -82,39 +90,47 @@ class IndexDetailView(DetailView):
 
 class AdDetailView(DetailView):
     model= Advertise
-    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
-    def get_context_data(self, **kwargs):
-        recents = Post.objects.order_by('-timestamp')[0:4]  
 
+    def get_context_data(self, **kwargs):
+        tags = Post.tags.all()
+        recents = Post.objects.order_by('-timestamp')[0:4]  
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
+        context['tags'] = tags
         return context
+
 
 class ReDetailView(DetailView):
     model= Recipe
-    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
-    def get_context_data(self, **kwargs):
-        recents = Post.objects.order_by('-timestamp')[0:4]  
 
+    def get_context_data(self, **kwargs):
+        tags = Post.tags.all()
+        recents = Post.objects.order_by('-timestamp')[0:4]  
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
+        context['tags'] = tags
         return context
+  
 
 class FeDetailView(DetailView):
     model= FeaturedPost
-    model = Post
     context_object_name = 'queryset'
     template_name = 'single.html'
+    
     def get_context_data(self, **kwargs):
+        tags = Post.tags.all()
         recents = Post.objects.order_by('-timestamp')[0:4]  
-
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
+        context['tags'] = tags
         return context
+  
+
+
 
 
 
@@ -130,7 +146,35 @@ class PageView(ListView):
         context['recent'] = recent
         #context['page_request_var'] = "page"
         return context
+
+# class TagList(ListView):
+#     model = Post
+#     template_name = 'loan.html'
+#     context_object_name = 'tags'
+
+#     def get_context_data(self, **kwargs):
+#         tags = Post.tags.all()
+#         context = super().get_context_data(**kwargs)
+#         context['tags'] = tags
+#         #context['page_request_var'] = "page"
+#         return context
+
+class ListCategory(ListView):
+    model = Category
+    template_name = 'shit.html'  # :)
+    context_object_name = 'queryset'
+        
     
+class TagIndexView(ListView):
+    model = Post
+    paginate_by = 2
+    template_name = 'sing.html'
+    context_object_name = 'queryset'
+
+    def get_queryset(self):
+        tags = get_object_or_404(Tag, pk=self.kwargs['pk'])
+        return Post.objects.filter(tags=tags)
+
 # class PostCategory(ListView):
 #     model = Post
 #     template_name = 'cat.html'

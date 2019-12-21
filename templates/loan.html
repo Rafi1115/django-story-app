@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="sidebar-box ftco-animate">
+    <h3 class="heading mb-4">Tag Cloud</h3>
+    ghhhhh
+
+      {% for tag in tags  %}
+  
+    <div class="tagcloud">
+      <a href="{% url 'tagged' tag.pk %}" class="tag-cloud-link">{{tag.name}}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+    
+{% endblock content %}

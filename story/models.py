@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 class PostView(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,8 +25,10 @@ class Category(models.Model):
     thumbnail = models.ImageField()
     detail = models.TextField()
     featured = models.BooleanField(default=True)
+
     # class Meta:
     #     verbose_name_plural = "Categories"
+    
     def __str__(self):
         return self.title
     # def get_absolute_url(self):
@@ -89,6 +92,7 @@ class Post(models.Model):
     user = models.ForeignKey(Author,on_delete=models.CASCADE)
     thumbnail = models.ImageField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title

@@ -5,7 +5,8 @@ from .import views
 from .views import (
     IndexView, SingleView, AboutView, StyleView, PageView,
     contact, CategoryDetailView, IndexDetailView, AdDetailView,
-    ReDetailView, FeDetailView, successView, CategorylView
+    ReDetailView, FeDetailView, successView, CategorylView,
+    TagIndexView, ListCategory
 )
 
 urlpatterns = [
@@ -19,6 +20,10 @@ urlpatterns = [
     path('pa/<pk>/', views.ReDetailView.as_view(), name='post-recipe'),
     path('p/<pk>/', views.FeDetailView.as_view(), name='post-featured'),
 
+    
+    path('tag/<pk>/', views.TagIndexView.as_view(), name='tagged'),
+    
+    path('cat/', views.ListCategory.as_view(), name='list-category'),
     path('cat/<pk>/', views.CategoryDetailView.as_view(), name='post-category'),
 
     path('style/', views.StyleView.as_view(), name='style'),
