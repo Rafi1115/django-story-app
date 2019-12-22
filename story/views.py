@@ -56,16 +56,13 @@ class IndexView(TemplateView):
         recent = Post.objects.order_by('timestamp')[0:1]
         featured = FeaturedPost.objects.filter()[0:3]
         recipe = Recipe.objects.filter()[0:2]
-
         advertise = Advertise.objects.filter()[0:5]
-        
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
         context['recent'] = recent
         context['recipe'] = recipe
         context['featured'] = featured
         context['advertise'] = advertise
-     
         return context
 
 
@@ -129,8 +126,6 @@ class FeDetailView(DetailView):
         context['tags'] = tags
         return context
   
-
-
 
 
 
