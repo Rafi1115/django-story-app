@@ -12,6 +12,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from .forms import ContactForm
+from itertools import chain
 from .models import Post, Author, PostView, Category, Recipe, FeaturedPost, Advertise
 from taggit.models import Tag
 
@@ -31,13 +32,21 @@ def get_author(user):
 
 class SearchView(View):
     def get(self, request, *args, **kwargs):  
-        queryset = Post.objects.all()
+        queryset1 = Post.objects.all()
+        queryset2 = Advertise.objects.all()
+        queryset3 = FeaturedPost.objects.all()
+        queryset4 = Recipe.objects.all()
         query = request.GET.get('q')
         if query:
-            queryset = queryset.filter(
-                Q(title__icontains=query) |
-                Q(overview__icontains=query)
-            ).distinct()
+            queryset1 = queryset1.filter(Q(title__icontains=query)|Q(overview__icontains=query)).distinct()
+            queryset2 = queryset2.filter(Q(title__icontains=query)|Q(overview__icontains=query)).distinct()
+            queryset3 = queryset3.filter(Q(title__icontains=query)|Q(overview__icontains=query)).distinct()
+            queryset4 = queryset4.filter(Q(title__icontains=query)|Q(overview__icontains=query)).distinct()
+            queryset = list(
+                sorted(
+                    chain(queryset1, queryset2, queryset3, queryset4),
+                    key=lambda objects: objects.pk
+                ))
         context = {
             'queryset': queryset,
           

@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from django.db.models import Q
+
+# class PostManager(models.Manager):
+#     def search(self, query=None):
+#         qs = self.get_queryset()
+#         if query is not None:
+#             or_lookup = (Q(title__icontains=query) | 
+#                          Q(overview__icontains=query)
+#                         )
+#             qs = qs.filter(or_lookup).distinct() 
+#             # distinct() is often necessary with Q lookups
+#         return qs
 
 class PostView(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -25,6 +37,7 @@ class Category(models.Model):
     thumbnail = models.ImageField()
     detail = models.TextField()
     featured = models.BooleanField(default=True)
+ 
     # post = models.ForeignKey('Post', on_delete=models.SET_NULL, null=True)
 
     # class Meta:
@@ -61,6 +74,7 @@ class Advertise(models.Model):
     thumbnail = models.ImageField()
     overview = models.TextField()
 
+
     def __str__(self):
         return self.title
 
@@ -75,6 +89,7 @@ class FeaturedPost(models.Model):
     overview = models.TextField()
     thumbnail = models.ImageField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.title
@@ -94,6 +109,7 @@ class Post(models.Model):
     thumbnail = models.ImageField()
     category = models.ForeignKey(Category, related_name='categories', on_delete=models.CASCADE)
     tags = TaggableManager()
+
 
     def __str__(self):
         return self.title
