@@ -1,1 +1,36 @@
 {% load static %}
+<!-- search-area start -->
+{% comment %}
+
+<div class="search-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="search-form">
+                        <span class="search-close"></span>
+                        <form action="{% url 'search' %}">
+                            {% csrf_token %}
+                            <input type="text" name="q" placeholder="Search here..."/>
+                            <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    {% endcomment %}
+
+
+</div>
+<div class="sidebar-box p-4 ftco-animate">
+<form action="{% url 'search' %}" class="search-form">
+    {% csrf_token %}
+<div class="form-group">
+  <span class="icon icon-search" ></span>
+  <input type="text" name="q" class="form-control" placeholder="Search">
+  <button type="submit" class="icon icon-search"><i class="fa fa-search"></i></button>
+  
+</div>
+</form>
+</div>

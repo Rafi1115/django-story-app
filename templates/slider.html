@@ -24,9 +24,15 @@
         <div class="row">
 
         	<div class="col-lg-9">
-        		<div class="row">
+				
 
-                        {% for post in category.post_set.all %}
+        		<div class="row">
+						
+									  
+					
+						
+						{% for post in queryset.categories.all %}
+						
                                     
         			<div class="col-md-6 col-lg-12 ftco-animate">
     						<div class="blog-entry d-lg-flex">
@@ -44,10 +50,10 @@
 		    				</div>
                         </div>
                             
-                        {% endfor %}
-                        
+						{% endfor %}
+					
+		
                 </div>
-                
 
 
 
@@ -55,13 +61,7 @@
 		          <div class="col text-center">
 		            <div class="block-27">
 		              <ul>
-		                <li><a href="#">&lt;</a></li>
-		                <li class="active"><span>1</span></li>
-		                <li><a href="#">2</a></li>
-		                <li><a href="#">3</a></li>
-		                <li><a href="#">4</a></li>
-		                <li><a href="#">5</a></li>
-		                <li><a href="#">&gt;</a></li>
+		  {% include "pagination.html" %}
 		              </ul>
 		            </div>
 		          </div>
@@ -86,30 +86,18 @@
 	              </form>
 	            </div>
 	            <div class="sidebar-box categories text-center ftco-animate">
-			          <h2 class="heading mb-4">Categories</h2>
-			          <ul class="category-image">
-			          	<li>
-			          		<a href="#" class="img d-flex align-items-center justify-content-center text-center" style="background-image: url({% static 'images/category-1.jpg' %});">
-			          			<div class="text">
-			          				<h3>Foods</h3>
-			          			</div>
-			          		</a>
-			          	</li>
-			          	<li>
-			          		<a href="#" class="img d-flex align-items-center justify-content-center text-center" style="background-image: url({% static 'images/category-2.jpg' %});">
-			          			<div class="text">
-			          				<h3>Lifestyle</h3>
-			          			</div>
-			          		</a>
-			          	</li>
-			          	<li>
-			          		<a href="#" class="img d-flex align-items-center justify-content-center text-center" style="background-image: url({% static 'images/category-2.jpg' %});">
-			          			<div class="text">
-			          				<h3>Others</h3>
-			          			</div>
-			          		</a>
-			          	</li>
-			          </ul>
+					<h2 class="heading mb-4">Categories</h2>
+					<ul class="category-image">
+						<li>
+							{% for category in category.all %}
+							<a href="{% url 'post-category' category.pk %}" class="img d-flex align-items-center justify-content-center text-center" style="background-image: url({{category.thumbnail.url}});">
+								<div class="text">
+									<h3>{{category.title}}</h3>
+								</div>
+							</a>		
+							{% endfor %}
+						</li>
+					</ul>
 	        		</div>
             </div>
         	</div>
@@ -123,7 +111,7 @@
         <div class="container">
           <div class="row d-flex justify-content-center">
             <div class="col-md-8 text-wrap text-center heading-section ftco-animate">
-              <h2 class="mb-4"><span>Subcribe to our Newsletter</span></h2>
+              <h2 class="mb-4"><span>Subcribe to ourjjjbb Newsletter</span></h2>
               <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
               <div class="row d-flex justify-content-center mt-4 mb-4">
                 <div class="col-md-8">

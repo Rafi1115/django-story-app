@@ -2,9 +2,10 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count, Q
-from django.views.generic import (View, ListView, 
+from django.views.generic import (View, ListView, FormView,
             TemplateView, DetailView, CreateView, UpdateView, DeleteView)
 from django.views import generic
+from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -29,7 +30,7 @@ def get_author(user):
 
 
 class SearchView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):  
         queryset = Post.objects.all()
         query = request.GET.get('q')
         if query:
@@ -38,9 +39,12 @@ class SearchView(View):
                 Q(overview__icontains=query)
             ).distinct()
         context = {
-            'queryset': queryset
+            'queryset': queryset,
+          
         }
         return render(request, 'search_results.html', context)
+
+
 
 class IndexView(TemplateView):
     model = Post
@@ -57,12 +61,14 @@ class IndexView(TemplateView):
         featured = FeaturedPost.objects.filter()[0:3]
         recipe = Recipe.objects.filter()[0:2]
         advertise = Advertise.objects.filter()[0:5]
+        category = Category.objects.all()
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
         context['recent'] = recent
         context['recipe'] = recipe
         context['featured'] = featured
         context['advertise'] = advertise
+        context['category'] = category
         return context
 
 
@@ -74,9 +80,11 @@ class IndexDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         tags = Post.tags.all()
+        category = Category.objects.all()
         recents = Post.objects.order_by('-timestamp')[0:4]  
         context = super().get_context_data(**kwargs)
         context['recents'] = recents
+        context['category'] = category
         context['tags'] = tags
         return context
 
@@ -97,7 +105,6 @@ class AdDetailView(DetailView):
         context['recents'] = recents
         context['tags'] = tags
         return context
-
 
 class ReDetailView(DetailView):
     model= Recipe
@@ -131,14 +138,17 @@ class FeDetailView(DetailView):
 
 class PageView(ListView):
     model = Post
+    #model = Category
     template_name = 'foods.html'
     context_object_name = 'queryset'
-    paginate_by = 4
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
-        recent = Post.objects.order_by('timestamp')[0:3]
+        recent = Post.objects.order_by('timestamp')[0:4]
+        category = Category.objects.all()
         context = super().get_context_data(**kwargs)
         context['recent'] = recent
+        context['category'] = category
         #context['page_request_var'] = "page"
         return context
 
@@ -153,19 +163,21 @@ class PageView(ListView):
 #         context['tags'] = tags
 #         #context['page_request_var'] = "page"
 #         return context
-
-class ListCategory(ListView):
-    model = Category
-    template_name = 'shit.html'  # :)
-    context_object_name = 'queryset'
         
     
 class TagIndexView(ListView):
     model = Post
+    model = Category
     paginate_by = 2
     template_name = 'sing.html'
     context_object_name = 'queryset'
 
+    def get_context_data(self, **kwargs):
+        category = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
+        
     def get_queryset(self):
         tags = get_object_or_404(Tag, pk=self.kwargs['pk'])
         return Post.objects.filter(tags=tags)
@@ -182,11 +194,38 @@ class TagIndexView(ListView):
 #         context['category'] = self.category
 #         return context
 
-class CategoryDetailView(generic.DetailView):
+class ListCategory(ListView):
+    model = Post
     model = Category
-    context_object_name = 'category'
+    template_name = 'shit.html'  # :)
+    context_object_name = 'queryset'
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        category = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
+
+class CategoryDetailView(generic.DetailView):
+    model = Post
+    model = Category
+    context_object_name = 'queryset'
     template_name = 'slider.html'
-    paginate_by = 1
+    paginate_by = 2
+    
+    def get_context_data(self, **kwargs):
+        category = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
+
+    # def get_context_data(self, **kwargs):
+    #     category = Category.objects.all()
+    #     object_list = Category.objects.filter(post=self.get_object())
+    #     context = super(CategoryDetailView, self).get_context_data(object_list=object_list, **kwargs)
+    #     context['category'] = category
+    #     return context
 
 
 class StyleView(ListView):
@@ -196,10 +235,9 @@ class StyleView(ListView):
     context_object_name = 'queryset'
 
     def get_context_data(self, **kwargs):
-        cate = Category.objects.all()
+        category = Category.objects.all()
        # category = Post.category.filter(featured=True)
         context = super().get_context_data(**kwargs)
-        context['cate'] = cate
         context['category'] = category
         return context
 
@@ -215,8 +253,38 @@ class SingleView(TemplateView):
     template_name = 'single.html'
 
 class AboutView(TemplateView):
+    model = Category
     template_name = 'about.html'
 
+    def get_context_data(self, **kwargs):
+        category = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
+
+
+class ContactView(FormView):
+    model = Category
+    form_class = ContactForm
+    success_url = reverse_lazy('contact') # we can have a specific page here..
+    template_name = 'contact.html'
+
+    def get_context_data(self, **kwargs):
+        category = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
+
+    def form_valid(self, form):
+        name = form.cleaned_data['name']
+        from_email = form.cleaned_data['email']
+        message = form.cleaned_data['message']  
+        # emails = ['youremail@gmail.com']
+        try:
+            send_mail(name, message, from_email, ['admin@example.com'])
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+        return super(ContactView, self).form_valid(form)
 
 
 def contact(request):

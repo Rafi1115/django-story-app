@@ -1,0 +1,26 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: firstblog
+From: rafik5vbf565@gmail.com
+To: admin@example.com
+Date: Fri, 10 Jan 2020 12:55:32 -0000
+Message-ID: 
+ <157866093249.8892.8359236629117536949@anonymous.www.tendawifi.com>
+
+class ContactView(FormView):
+    form_class = ContactForm
+    success_url = reverse_lazy('contact') # we can have a specific page here..
+    template_name = 'contact.html'
+
+    def form_valid(self, form):
+        name = form.cleaned_data['name']
+        from_email = form.cleaned_data['email']
+        message = form.cleaned_data['message']  
+        # emails = ['youremail@gmail.com']
+        try:
+            send_mail(name, message, from_email, ['admin@example.com'])
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+        return super(ContactView, self).form_valid(form)
+-------------------------------------------------------------------------------

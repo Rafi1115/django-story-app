@@ -25,6 +25,7 @@ class Category(models.Model):
     thumbnail = models.ImageField()
     detail = models.TextField()
     featured = models.BooleanField(default=True)
+    # post = models.ForeignKey('Post', on_delete=models.SET_NULL, null=True)
 
     # class Meta:
     #     verbose_name_plural = "Categories"
@@ -39,7 +40,7 @@ class Category(models.Model):
         })
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=100)
     overview = models.TextField()
     thumbnail = models.ImageField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -91,7 +92,7 @@ class Post(models.Model):
     #content = HTMLField()
     user = models.ForeignKey(Author,on_delete=models.CASCADE)
     thumbnail = models.ImageField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name='categories', on_delete=models.CASCADE)
     tags = TaggableManager()
 
     def __str__(self):

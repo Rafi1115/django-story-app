@@ -41,79 +41,8 @@
 		          <div class="col text-center">
 		            <div class="block-27">
 						 <!-- Pagination -->
-{% comment %}
-						 {% if is_paginated %}
-						 <ul>
-						   {% if page_obj.has_previous %}
-							 <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-
-						   {% endif %}
-						   {% for i in paginator.page_range %}
-							 {% if page_obj.number == i %}
-							   <li class="active"><span>{{ i }}</span></li>
-							 {% else %}
-							   <li><a href="?page={{ i }}">{{ i }}</a></li>
-							 {% endif %}
-						   {% endfor %}
-						   {% if page_obj.has_next %}
-							 <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-						  
-						   {% endif %}
-						 </ul>
-					   {% endif %}
-
-					   <!-- just like justdjango above one -->
-
-                    {% if is_paginated %}
-						 <ul>
-						    {% if page_obj.has_previous %}
-							 <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-						     {% endif %}
-
-				 {% for i in paginator.page_range %}
-							
-					{% if i <= page_obj.number|add:3 and i >= page_obj.number|add:-3 %}
-							<li><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
-					{% endif %}
-			
-			    	{% endfor %}
-
-
-						   {% if page_obj.has_next %}
-							 <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-						   {% endif %}
-						 </ul>
-					{% endif %}
-
-					{% endcomment %}
-
                     <ul>
-						{% if page_obj.has_previous %}
-						<li>
-						  <a href="?page=1"><span aria-hidden="true">&laquo;</span></a>
-						  <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
-						</li>   
-						{% endif %}
-						
-						{% for n in page_obj.paginator.page_range %}
-						  {% if page_obj.number == n %}
-							<li class="active">
-							  <span>{{ n }}<span class="sr-only">(current)</span></span>
-							</li>
-						  {% elif n > page_obj.number|add:'-3' and n < page_obj.number|add:'3' %}
-							<li class="page-item"><a href="?page={{ n }}">{{ n }}</a></li>
-						  {% endif %}
-						{% endfor %}
-						
-						{% if page_obj.has_next %}
-						  <li class="page-item">
-							  
-							<a href="?page={{ page_obj.next_page_number }}">&gt;</a>
-							<a href="?page={{ page_obj.paginator.num_pages }}">
-								<span aria-hidden="true">&raquo;</span></a>
-
-						  </li>
-						  {% endif %}   
+		{% include "pagination.html" %}  
 					</ul>
 		            </div>
 		          </div>

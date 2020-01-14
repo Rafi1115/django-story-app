@@ -1,0 +1,16 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: xx
+From: rafik5vbf565@gmail.com
+To: admin@example.com
+Date: Fri, 10 Jan 2020 13:01:26 -0000
+Message-ID: 
+ <157866128658.4344.13267849402742691126@anonymous.www.tendawifi.com>
+
+def get_context_data(self, **kwargs):
+        category = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
+-------------------------------------------------------------------------------

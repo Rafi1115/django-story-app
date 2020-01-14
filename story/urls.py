@@ -6,7 +6,7 @@ from .views import (
     IndexView, SingleView, AboutView, StyleView, PageView,
     contact, CategoryDetailView, IndexDetailView, AdDetailView,
     ReDetailView, FeDetailView, successView, CategorylView,
-    TagIndexView, ListCategory
+    TagIndexView, ListCategory, ContactView, SearchView
 )
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     
     path('page/', views.PageView.as_view(), name='page'),
+    path('search/', views.SearchView.as_view(), name='search'),
 
     path('page/<pk>/', views.IndexDetailView.as_view(), name='post-detail'),
     path('pag/<pk>/', views.AdDetailView.as_view(), name='post-advertise'),
@@ -31,9 +32,10 @@ urlpatterns = [
 
     path('single/', views.SingleView.as_view(), name='single'),
     path('about/', views.AboutView.as_view(), name='about'),
-  
-    
-    path('contact/', contact, name='email'),
+
+
+    path('contact/', views.ContactView.as_view(), name='contact'),
+    # path('contact/', contact, name='email'),
     path('success/', successView, name='success'),
     
 ]
