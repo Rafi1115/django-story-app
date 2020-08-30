@@ -24,7 +24,7 @@
         	<div class="col-lg-9">
         		<div class="row">
 
-                             {% for post in recent  %}
+                             {% for post in queryset  %}
         			<div class="col-md-4 ftco-animate">
     						<div class="blog-entry">
 		    					<a href="{{post.get_absolute_url}}" class="img-2"><img src="{{post.thumbnail.url}}" class="img-fluid" alt="Colorlib Template"></a>
@@ -58,12 +58,9 @@
 			          </div>
 	        		</div>
 	        		<div class="sidebar-box p-4 ftco-animate">
-	              <form action="#" class="search-form">
-	                <div class="form-group">
-	                  <span class="icon icon-search"></span>
-	                  <input type="text" class="form-control" placeholder="Search">
-	                </div>
-	              </form>
+
+	              {% include "search.html" %}
+				  
 	            </div>
 	            <div class="sidebar-box categories text-center ftco-animate">
 			          <h2 class="heading mb-4">Categories</h2>
@@ -95,7 +92,7 @@
               <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
               <div class="row d-flex justify-content-center mt-4 mb-4">
                 <div class="col-md-8">
-                  <form action="#" class="subscribe-form">
+                  <form action="." class="subscribe-form">
                     <div class="form-group d-flex">
                       <input type="text" class="form-control" placeholder="Enter email address">
                       <input type="submit" value="Subscribe" class="submit px-3">

@@ -57,7 +57,7 @@ class SearchView(View):
 
 class IndexView(TemplateView):
     model = Post
-    model = Recipe
+    model = Recipe 
     model = Category
     model = FeaturedPost
     model = Advertise
@@ -147,10 +147,9 @@ class FeDetailView(DetailView):
 
 class PageView(ListView):
     model = Post
-    #model = Category
     template_name = 'foods.html'
     context_object_name = 'queryset'
-    paginate_by = 3
+    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         recent = Post.objects.order_by('timestamp')[0:4]
@@ -216,16 +215,17 @@ class ListCategory(ListView):
         context['category'] = category
         return context
 
-class CategoryDetailView(generic.DetailView):
+class CategoryDetailView(generic.DetailView, MultipleObjectMixin):
     model = Post
     model = Category
     context_object_name = 'queryset'
     template_name = 'slider.html'
-    paginate_by = 2
+    paginate_by = 1
     
     def get_context_data(self, **kwargs):
         category = Category.objects.all()
-        context = super().get_context_data(**kwargs)
+        object_list = Category.objects.all()
+        context = super(CategoryDetailView, self).get_context_data(object_list=object_list, **kwargs)
         context['category'] = category
         return context
 
